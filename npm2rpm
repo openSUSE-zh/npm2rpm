@@ -13,7 +13,10 @@ echo $RPMNAME
 
 VERSION=$(npm view $NAME version)
 
-# Generate source tar ball
+# Remove previous tarballs
+rm -f $RPMNAME-*.tar.gz
+
+# Generate source tarball
 
 npm install $NAME
 mv node_modules/$NAME $RPMNAME-$VERSION
