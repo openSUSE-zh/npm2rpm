@@ -18,12 +18,14 @@ VERSION=$(npm view $NAME version)
 npm install $NAME
 mv node_modules/$NAME $RPMNAME-$VERSION
 mv node_modules $RPMNAME-$VERSION
-# Remove all hidden files and directories
-find $RPMNAME-$VERSION/node_modules -mindepth 1 -name '.*' -exec rm -rf {} \;
-# Remove all temp files
-find . -name '*.bak' -o -name '*.swp' -o -name '~*' -exec rm -rf {} \;
-# Remove all execute bit from files of sub modules
-chmod -R -x+X $RPMNAME-$VERSION/node_modules
+{
+    # Remove all hidden files and directories
+    find $RPMNAME-$VERSION/node_modules -mindepth 1 -name '.*' -exec rm -rf {} \;
+    # Remove all temp files
+    find . -name '*.bak' -o -name '*.swp' -o -name '~*' -exec rm -rf {} \;
+    # Remove all execute bit from files of sub modules
+    chmod -R -x+X $RPMNAME-$VERSION/node_modules
+} &> /dev/null
 tar -pcvzf $RPMNAME-$VERSION.tar.gz $RPMNAME-$VERSION >/dev/null
 rm -rf package-lock.json $RPMNAME-$VERSION
 
