@@ -26,7 +26,7 @@ find . -name '*.bak' -o -name '*.swp' -o -name '~*' -exec rm -rf {} \;
 chmod -R -x+X node_modules
 cd ..
 mv $NAME $RPMNAME-$VERSION
-tar -pcvzf $RPMNAME-$VERSION.tar.gz $RPMNAME-$VERSION
+tar -pcvzf $RPMNAME-$VERSION.tar.gz $RPMNAME-$VERSION >/dev/null
 mv $RPMNAME-$VERSION.tar.gz ..
 cd ..
 rm -rf package-lock.json node_modules
