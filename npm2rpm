@@ -16,20 +16,16 @@ VERSION=$(npm view $NAME version)
 # Generate source tar ball
 
 npm install $NAME
-cd node_modules/$NAME
-npm install --production
+mv node_modules/$NAME $RPMNAME-$VERSION
+mv node_modules $RPMNAME-$VERSION
 # Remove all hidden files and directories
-find node_modules -mindepth 1 -name '.*' -exec rm -rf {} \;
+find $RPMNAME-$VERSION/node_modules -mindepth 1 -name '.*' -exec rm -rf {} \;
 # Remove all temp files
 find . -name '*.bak' -o -name '*.swp' -o -name '~*' -exec rm -rf {} \;
 # Remove all execute bit from files of sub modules
-chmod -R -x+X node_modules
-cd ..
-mv $NAME $RPMNAME-$VERSION
+chmod -R -x+X $RPMNAME-$VERSION/node_modules
 tar -pcvzf $RPMNAME-$VERSION.tar.gz $RPMNAME-$VERSION >/dev/null
-mv $RPMNAME-$VERSION.tar.gz ..
-cd ..
-rm -rf package-lock.json node_modules
+rm -rf package-lock.json $RPMNAME-$VERSION
 
 # Generate spec file
 
