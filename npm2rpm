@@ -17,7 +17,7 @@ VERSION=$(npm view $NAME version)
 
 npm install $NAME
 cd node_modules/$NAME
-npm install
+npm install --production
 # Remove all hidden files and directories
 find node_modules -mindepth 1 -name '.*' -exec rm -rf {} \;
 # Remove all temp files
