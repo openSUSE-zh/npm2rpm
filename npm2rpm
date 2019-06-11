@@ -20,6 +20,8 @@ cd node_modules/$NAME
 npm install
 # Remove all hidden files and directories
 find node_modules -mindepth 1 -name '.*' -exec rm -rf {} \;
+# Remove all temp files
+find . -name '*.bak' -o -name '*.swp' -o -name '~*' -exec rm -rf {} \;
 # Remove all execute bit from files of sub modules
 chmod -R -x+X node_modules
 cd ..
