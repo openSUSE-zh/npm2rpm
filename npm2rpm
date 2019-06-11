@@ -1,0 +1,44 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+    RPMNAME=$(basename "$PWD")
+    NAME=${RPMNAME:6}
+else
+    NAME=$1
+    RPMNAME=npmjs-$NAME
+fi
+
+echo $NAME
+echo $RPMNAME
+
+VERSION=$(npm view $NAME version)
+
+# Generate source tar ball
+
+npm install $NAME
+cd node_modules/$NAME
+npm install
+# Remove all hidden files and directories
+find node_modules -mindepth 1 -name '.*' -exec rm -rf {} \;
+# Remove all execute bit from files of sub modules
+chmod -R -x+X node_modules
+cd ..
+mv $NAME $RPMNAME-$VERSION
+tar -pcvzf $RPMNAME-$VERSION.tar.gz $RPMNAME-$VERSION
+mv $RPMNAME-$VERSION.tar.gz ..
+cd ..
+rm -rf package-lock.json node_modules
+
+# Generate spec file
+
+if [ ! -f "$RPMNAME.spec" ]; then
+    rpmdev-newspec -t nodejs $RPMNAME
+fi
+
+# Fill %npm_name variable
+
+sed -i "s/\[npm_name\]/$NAME/g" $RPMNAME.spec
+
+# Update version number
+
+sed -i "s/Version\:.*/Version:        $VERSION/g" $RPMNAME.spec
